@@ -45,7 +45,7 @@ public class DynamicWordookie extends PApplet {
 
 
 
-
+	final double WEIGHT_SCALE = 2.0;
 
 	final String INPUT_FILE = "/home/towlarn/hop/output/part-00010";
 	final String FONT_NAME = "Serif";
@@ -112,14 +112,14 @@ public class DynamicWordookie extends PApplet {
 				word.font = font;
 				word.col = ColorStuff.BlueIce[ (int)random(ColorStuff.BlueIce.length) ];
 				wordMap.put( token, word );
-				word.weight += tword.getFrequency();
+				word.weight += tword.getFrequency()*WEIGHT_SCALE;
 				word.fontSize = (int)min( word.weight + MIN_FONTSIZE, MAX_FONTSIZE );
 				layout.doLayout( word );
 			}
 			else
 			{
 				// fit word in
-				word.weight += tword.getFrequency();
+				word.weight += tword.getFrequency()*WEIGHT_SCALE;
 				word.fontSize = (int)min( word.weight + MIN_FONTSIZE, MAX_FONTSIZE );
 				if ( layout.intersects( word ) )
 					layout.doLayout( word );
