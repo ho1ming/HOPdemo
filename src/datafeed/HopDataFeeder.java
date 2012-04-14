@@ -31,7 +31,7 @@ public class HopDataFeeder implements Runnable{
 	private int waitTime;
 	
 	public HopDataFeeder(DynamicWordookie wordle, DynamicChart chart){
-		this(wordle, chart, 1000);
+		this(wordle, chart, 5000);
 	}
 	
 	public HopDataFeeder(DynamicWordookie wordle, DynamicChart chart, int waitTime){

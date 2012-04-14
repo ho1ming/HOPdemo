@@ -83,7 +83,6 @@ public class DynamicWordookie extends PApplet {
 
 	public synchronized void draw()
 	{
-		System.out.println("drawing");
 		if (itr == null) return;
 		
 		if ( itr.hasNext() )
@@ -113,6 +112,7 @@ public class DynamicWordookie extends PApplet {
 				word.font = font;
 				word.col = ColorStuff.BlueIce[ (int)random(ColorStuff.BlueIce.length) ];
 				wordMap.put( token, word );
+				word.weight += tword.getFrequency();
 				word.fontSize = (int)min( word.weight + MIN_FONTSIZE, MAX_FONTSIZE );
 				layout.doLayout( word );
 			}
