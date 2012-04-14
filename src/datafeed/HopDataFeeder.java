@@ -6,31 +6,50 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashSet;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.PriorityQueue;
 
-import processing.core.*; 
+import wordookie.DynamicWordookie;
+import chart.DynamicChart;
 
 public class HopDataFeeder implements Runnable{
 
-	String fileName = "";
-	File inputFile;
-	private PriorityQueue<TwitterWord> wordList = new PriorityQueue<TwitterWord>();
+	static final String pathName = "/home/towlarn/hop/output/";
+	static final String fileName = "part-";
 	
-	public synchronized PriorityQueue<TwitterWord> getWordList(){
-		return this.wordList;
+	static final NumberFormat nf = new DecimalFormat("00000");
+	
+	private final List<List<TwitterWord>> wordlists = new ArrayList<List<TwitterWord>>();
+	
+	private int fileNum;
+	private DynamicWordookie wordle;
+	private DynamicChart chart;
+	
+	public HopDataFeeder(DynamicWordookie wordle, DynamicChart chart) {
+		this.wordle = wordle;
+		this.chart = chart;
+	}
+
+	public List<List<TwitterWord>> getWordList(){
+		return this.wordlists;
 	}
 
 	public void run(){
 		//PApplet pa = new PApplet();
 		//InputStream is = pa.createInput( fileName );
+		fileNum = 0;
 		
 		while(true){ //keep polling
 			
-			wordList = new PriorityQueue<TwitterWord>();
+			final List<TwitterWord> words = new ArrayList<TwitterWord>();
+			final String fnum = nf.format(fileNum);
+			final File inputFile = new File(pathName+fileName+fnum);
 			
-			inputFile = new File(fileName);
-
+			System.out.println("file:  "+inputFile.toString());
 			if(inputFile.exists()){
 
 				BufferedReader buf = null;
@@ -53,26 +72,38 @@ public class HopDataFeeder implements Runnable{
 
 					if ( line != null ) {
 						line = line.trim();
-						if ( line.length() != 2 ) //should be: text frequency (e.g. has 10)
-							continue;
+						
 						String [] tokens = line.split("\\s+");
+						if ( tokens.length != 2 ) //should be: text frequency (e.g. has 10)
+							continue;
+						
 						String text = tokens[0];
 						int frequency = Integer.parseInt(tokens[1]);
 						TwitterWord newWord = new TwitterWord(text, frequency);
-						wordList.add(newWord);
+						words.add(newWord);
 
 					}else {
 						eof = true;
 					}
 				}
+				Collections.sort(words, Collections.reverseOrder());
 
+				/* update datasets for wordle and chart */
+				chart.updateDataset(words);
+				
+				fileNum += 80;
 			}
 			try {
-				Thread.sleep(500);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		}//end while
+		} //end while
+	}
+	
+	public static void main(String[] args){
+		//HopDataFeeder hdf = new HopDataFeeder();
+		//hdf.run();
 	}
 
 }

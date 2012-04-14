@@ -15,12 +15,32 @@ public class TwitterWord implements Comparable<TwitterWord>{
 	
 
 	@Override
-	public boolean equals(Object otherWord){
-		
-		TwitterWord other = (TwitterWord) otherWord;
-		
-		return this.text.equals(other.text);
-		
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + frequency;
+		result = prime * result + ((text == null) ? 0 : text.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TwitterWord other = (TwitterWord) obj;
+		if (frequency != other.frequency)
+			return false;
+		if (text == null) {
+			if (other.text != null)
+				return false;
+		} else if (!text.equals(other.text))
+			return false;
+		return true;
 	}
 
 	@Override
@@ -49,6 +69,10 @@ public class TwitterWord implements Comparable<TwitterWord>{
 
 	public void setFrequency(int frequency) {
 		this.frequency = frequency;
+	}
+	
+	public String toString(){
+		return "text=" + this.text + ", freq=" + this.frequency;
 	}
 
 }

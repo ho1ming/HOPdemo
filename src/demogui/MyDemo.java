@@ -12,17 +12,14 @@
 package demogui;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.util.Random;
+
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import org.jfree.chart.ChartPanel;
-
-import chart.DynamicChart;
-import datafeed.LiveTwitterFeeder;
 
 import wordookie.DynamicWordookie;
+import chart.DynamicChart;
+import datafeed.HopDataFeeder;
+import datafeed.LiveTwitterFeeder;
 
 /**
  *
@@ -51,6 +48,7 @@ public class MyDemo extends javax.swing.JFrame {
 
 	private DynamicWordookie wordle;
 	private DynamicChart chart;
+	private HopDataFeeder hdf;
 
 	/** Creates new form ContactEditorUI */
 	public MyDemo() {
@@ -66,6 +64,10 @@ public class MyDemo extends javax.swing.JFrame {
 		chart = new DynamicChart();
 		chartPanel.add(chart);
 		chart.init();
+		
+		hdf = new HopDataFeeder(wordle, chart);
+		Thread t = new Thread(hdf);
+		t.start();
 		
 		LiveTwitterFeeder twitterFeed = new LiveTwitterFeeder(jTextPane1);
 		Thread twitterFeedThread = new Thread(twitterFeed);

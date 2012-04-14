@@ -45,7 +45,7 @@ public class DynamicWordookie extends PApplet {
 
 
 
-	final String INPUT_FILE = "/home/yatmingho/Desktop/sampletxt";
+	final String INPUT_FILE = "/home/towlarn/hop/output/part-00010";
 	final String FONT_NAME = "Serif";
 	final int BACKGROUND = color( 0 );
 	final int MAX_FONTSIZE = 100;

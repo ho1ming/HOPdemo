@@ -58,7 +58,7 @@ public class DumbParser {
 				line = line.trim();
 				if ( line.length() == 0 )
 					continue;
-				String [] tokens = line.split( " " );
+				String [] tokens = line.split( "\t" );
 				for( int i = 0; i < tokens.length; i++ ) {
 					wordList.add( tokens[i] );
 				}
