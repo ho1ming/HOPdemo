@@ -78,6 +78,7 @@ public class DynamicWordookie extends PApplet {
 	
 	public synchronized void updateDataset(List<TwitterWord> words) {
 		itr = words.iterator();
+		wordMap.clear();
 	}
 
 	public synchronized void draw()
