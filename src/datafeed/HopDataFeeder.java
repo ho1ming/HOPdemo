@@ -28,10 +28,16 @@ public class HopDataFeeder implements Runnable{
 	private int fileNum;
 	private DynamicWordookie wordle;
 	private DynamicChart chart;
+	private int waitTime;
 	
-	public HopDataFeeder(DynamicWordookie wordle, DynamicChart chart) {
+	public HopDataFeeder(DynamicWordookie wordle, DynamicChart chart){
+		this(wordle, chart, 1000);
+	}
+	
+	public HopDataFeeder(DynamicWordookie wordle, DynamicChart chart, int waitTime){
 		this.wordle = wordle;
 		this.chart = chart;
+		this.waitTime = waitTime;
 	}
 
 	public List<List<TwitterWord>> getWordList(){
@@ -89,12 +95,14 @@ public class HopDataFeeder implements Runnable{
 				Collections.sort(words, Collections.reverseOrder());
 
 				/* update datasets for wordle and chart */
+				System.out.println("update chart dataset");
 				chart.updateDataset(words);
-				
-				fileNum += 80;
+				System.out.println("update wordle dataset");
+				wordle.updateDataset(words);
+				fileNum ++;
 			}
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(waitTime);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

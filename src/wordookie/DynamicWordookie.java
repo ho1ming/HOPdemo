@@ -20,6 +20,8 @@ import java.util.*;
 import java.util.zip.*; 
 import java.util.regex.*; 
 
+import datafeed.TwitterWord;
+
 public class DynamicWordookie extends PApplet {
 
 	/*
@@ -53,7 +55,6 @@ public class DynamicWordookie extends PApplet {
 	final int FADE = 2;
 	final boolean TAKE_SNAPSHOTS = false;
 
-	java.util.List stringList;
 	Iterator itr;
 	Map wordMap;
 	Layout layout;
@@ -65,10 +66,7 @@ public class DynamicWordookie extends PApplet {
 		size( 666, 335 );
 		frameRate( 15 );
 
-		DumbParser parser = new DumbParser();
-		parser.load( createInput( INPUT_FILE ) );
-		stringList = parser.getWords();
-		itr = stringList.iterator();
+		itr = null;
 
 		wordMap = new HashMap();
 
@@ -77,12 +75,21 @@ public class DynamicWordookie extends PApplet {
 		//layout.setAngleType( Layout.ANYWAY );
 		background( BACKGROUND );
 	}
+	
+	public synchronized void updateDataset(List<TwitterWord> words) {
+		itr = words.iterator();
+	}
 
-	public void draw()
+	public synchronized void draw()
 	{
+		System.out.println("drawing");
+		if (itr == null) return;
+		
 		if ( itr.hasNext() )
 		{
-			String token = (String)itr.next();
+			TwitterWord tword = (TwitterWord) itr.next();
+			
+			String token = tword.getText();
 			token.trim();
 			token = token.toLowerCase();
 			ColoredWord word = (ColoredWord)wordMap.get( token );
@@ -111,7 +118,7 @@ public class DynamicWordookie extends PApplet {
 			else
 			{
 				// fit word in
-				word.weight += 1;
+				word.weight += tword.getFrequency();
 				word.fontSize = (int)min( word.weight + MIN_FONTSIZE, MAX_FONTSIZE );
 				if ( layout.intersects( word ) )
 					layout.doLayout( word );
@@ -148,11 +155,13 @@ public class DynamicWordookie extends PApplet {
 					if ( w.life < 0 ) w.life = 0;
 				}
 			}
+			/*
 			if ( !anyleft )
 			{
 				println( "Done." );
 				noLoop();
 			}
+			*/
 		}
 	}
 
@@ -185,5 +194,8 @@ public class DynamicWordookie extends PApplet {
 			super( t, w );
 		}
 	}
+
+
+
 
 }
