@@ -108,10 +108,5 @@ public class HopDataFeeder implements Runnable{
 			}
 		} //end while
 	}
-	
-	public static void main(String[] args){
-		//HopDataFeeder hdf = new HopDataFeeder();
-		//hdf.run();
-	}
 
 }
