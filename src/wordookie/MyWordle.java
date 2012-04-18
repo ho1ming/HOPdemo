@@ -64,7 +64,7 @@ public class MyWordle extends PApplet {
 		itr = stringList.iterator();
 
 		/* Ivan */
-		realTimeWordList = feeder.getWordList();
+		realTimeWordList = null; //feeder.getWordList();
 		
 		wordMap = new HashMap();
 

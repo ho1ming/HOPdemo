@@ -25,7 +25,7 @@ import datafeed.LiveTwitterFeeder;
  *
  * @author Hadoop
  */
-public class MyDemo extends javax.swing.JFrame {
+public class TwitterGUI extends javax.swing.JFrame {
 
 	private final int FONT_SIZE = 20;
 	private final int NUMBER_OF_REPEATS = 3;
@@ -49,9 +49,10 @@ public class MyDemo extends javax.swing.JFrame {
 	private DynamicWordookie wordle;
 	private DynamicChart chart;
 	private HopDataFeeder hdf;
+	private String textPaneContent;
 
 	/** Creates new form ContactEditorUI */
-	public MyDemo() {
+	public TwitterGUI() {
 		initComponents();
 		initProgressing();
 	}
@@ -89,9 +90,14 @@ public class MyDemo extends javax.swing.JFrame {
 		wordlePanel = new javax.swing.JPanel();
 		chartPanel = new javax.swing.JPanel();
 		
-		this.setTitle("Real Time MapReduce: Twitter Feed Count Demo");
+		this.setTitle("Real Time Twitter Analytics with Continuous MapReduce");
 		jTextPane1.setBackground(Color.BLACK);
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		jTextPane1.setEditable(false);
+		
+		textPaneContent = "";
+		jTextPane1.setText(textPaneContent);
+		jTextPane1.setForeground(Color.WHITE);
 
 		jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Live Twitter Feed", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Lucida Grande", 1, 12))); // NOI18N
 
@@ -161,7 +167,7 @@ public class MyDemo extends javax.swing.JFrame {
 	 * @param args the command line arguments
 	 */
 	public static void main(String args[]) {
-		MyDemo ui = new MyDemo();
+		TwitterGUI ui = new TwitterGUI();
 		ui.setVisible(true);
 	}
 }

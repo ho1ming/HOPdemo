@@ -1,7 +1,5 @@
 package datafeed;
 
-import java.awt.Color;
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,25 +7,24 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import javax.swing.JTextArea;
 import javax.swing.JTextPane;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyleContext;
 
 public class LiveTwitterFeeder implements Runnable {
 	
-	int port = 9999;
+	public final int LENGTH_LIMIT = 5000;
+	
+	int port = 5999;
 	JTextPane tp;
 	Socket s;
 	ServerSocket ss;
 	
+	StringBuffer text;
+	
 	public LiveTwitterFeeder(JTextPane tp){
-		
+		text = new StringBuffer();
 		this.tp = tp;
 		try {
-			ss = new ServerSocket(9999);
+			ss = new ServerSocket(port);
 			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -39,15 +36,25 @@ public class LiveTwitterFeeder implements Runnable {
 	public void run(){
 		try {
 			s = ss.accept();
+			System.out.println(" accepted socket");
 			BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			while(true){
 				
 				String line;
 				
 				line = br.readLine();
+				line = line.trim();
+				line += "\n\n";
+				//System.out.println("Twitter feed got line: " + line);
 				
-				//System.out.println("Twitter feed: get line: " + line);
+				text.insert(0, line);
+				tp.setText(text.toString());
 				
+				if (text.length() > LENGTH_LIMIT){
+					String sub = text.substring(0, LENGTH_LIMIT);
+					text = new StringBuffer(sub);
+				}
+				/* 
 				StyleContext sc = StyleContext.getDefaultStyleContext();
 			    AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY,
 			        StyleConstants.Foreground, Color.yellow);
@@ -59,7 +66,8 @@ public class LiveTwitterFeeder implements Runnable {
 			    tp.replaceSelection(line+"\n"); // there is no selection, so inserts at caret
 				
 				tp.validate();
-				tp.setCaretPosition(tp.getText().length()-1);
+				tp.setCaretPosition(Math.max(0, tp.getText().length()-1));
+				*/
 			}
 			
 		} catch (UnknownHostException e) {

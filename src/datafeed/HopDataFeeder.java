@@ -59,8 +59,10 @@ public class HopDataFeeder implements Runnable{
 			if(inputFile.exists()){
 
 				BufferedReader buf = null;
+				FileInputStream fis = null;
 				try {
-					buf = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
+					fis = new FileInputStream(inputFile);
+					buf = new BufferedReader(new InputStreamReader(fis));
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
@@ -95,12 +97,17 @@ public class HopDataFeeder implements Runnable{
 				Collections.sort(words, Collections.reverseOrder());
 
 				/* update datasets for wordle and chart */
-				System.out.println("update chart dataset");
+				//System.out.println("update chart dataset");
 				chart.updateDataset(words);
-				System.out.println("update wordle dataset");
+				//System.out.println("update wordle dataset");
 				wordle.updateDataset(words);
 				fileNum ++;
+				
+				if (buf != null){
+					try { buf.close();} catch (IOException e) {e.printStackTrace();}
+				}
 			}
+			
 			try {
 				Thread.sleep(waitTime);
 			} catch (InterruptedException e) {
