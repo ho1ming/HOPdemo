@@ -52,7 +52,7 @@ public class DynamicWordookie extends PApplet {
 	final int BACKGROUND = color( 0 );
 	final int MAX_FONTSIZE = 100;
 	final int MIN_FONTSIZE = 16;
-	final int FADE = 2;
+	final int FADE = 4;
 	final boolean TAKE_SNAPSHOTS = false;
 
 	Iterator itr;
@@ -60,6 +60,7 @@ public class DynamicWordookie extends PApplet {
 	Layout layout;
 	PFont font;
 	boolean looping = true;
+	boolean doClear;
 
 	public void setup()
 	{
@@ -69,6 +70,7 @@ public class DynamicWordookie extends PApplet {
 		itr = null;
 
 		wordMap = new HashMap();
+		doClear = false;
 
 		font = createFont( FONT_NAME, 48 );
 		layout = new Layout( this, BACKGROUND );
@@ -76,13 +78,22 @@ public class DynamicWordookie extends PApplet {
 		background( BACKGROUND );
 	}
 	
-	public synchronized void updateDataset(List<TwitterWord> words) {
+	public void updateDataset(List<TwitterWord> words) {
 		itr = words.iterator();
-		wordMap.clear();
+		//wordMap.clear();
+		doClear = true;
+	}
+	
+	public synchronized void clear(){
+		if (doClear){
+			wordMap.clear();
+			doClear = false;
+		}
 	}
 
-	public synchronized void draw()
+	public void draw()
 	{
+		//System.out.println("draw");
 		if (itr == null) return;
 		
 		if ( itr.hasNext() )
@@ -114,7 +125,9 @@ public class DynamicWordookie extends PApplet {
 				wordMap.put( token, word );
 				word.weight += tword.getFrequency()*WEIGHT_SCALE;
 				word.fontSize = (int)min( word.weight + MIN_FONTSIZE, MAX_FONTSIZE );
+				//System.out.println("nullword");
 				layout.doLayout( word );
+				//System.out.println("nullword3");
 			}
 			else
 			{
@@ -164,6 +177,7 @@ public class DynamicWordookie extends PApplet {
 			}
 			*/
 		}
+		clear();
 	}
 
 	public void snap()
@@ -177,6 +191,7 @@ public class DynamicWordookie extends PApplet {
 		{
 		case ' ':
 			looping = !looping;
+			System.out.println("looping="+looping);
 			break;
 		}
 	}

@@ -73,6 +73,23 @@ public class TwitterGUI extends javax.swing.JFrame {
 		LiveTwitterFeeder twitterFeed = new LiveTwitterFeeder(jTextPane1);
 		Thread twitterFeedThread = new Thread(twitterFeed);
 		twitterFeedThread.start();
+		
+		// what the 
+		/*
+		Thread t2 = new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				wordle.draw();
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		});
+		t2..start()*/
 	}
 
 	/** This method is called from within the constructor to

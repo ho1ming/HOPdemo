@@ -97,12 +97,12 @@ public class HopDataFeeder implements Runnable{
 				Collections.sort(words, Collections.reverseOrder());
 
 				/* update datasets for wordle and chart */
-				//System.out.println("update chart dataset");
+				System.out.println("update chart dataset");
 				chart.updateDataset(words);
-				//System.out.println("update wordle dataset");
+				System.out.println("update wordle dataset");
 				wordle.updateDataset(words);
 				fileNum ++;
-				
+
 				if (buf != null){
 					try { buf.close();} catch (IOException e) {e.printStackTrace();}
 				}

@@ -158,10 +158,13 @@ public class Layout implements PConstants {
 
 		centerPoint = new Point( (int)word.x, (int)word.y );
 		int r = 1;
-		while( intersects( word ) ) {
+		int i = 0;
+		
+		while( intersects( word ) && i < 100 ) {
 			//updatePosition( word, r++ );
 
 			// makeInitialPosition() is faster
+			i++;
 			makeInitialPosition( word );
 		}
 	}
@@ -178,10 +181,13 @@ public class Layout implements PConstants {
 		// get width & height of word
 		Dimension dim = wordHalfDimensions( word );
 
+		int iter = 0;
 		float x, y;
 		do {
 			x = (float)rand.nextGaussian() * applet.width/8 + applet.width/2;
 			y = (float)rand.nextGaussian() * applet.height/8 + applet.height/2;
+			iter++;
+			if (iter > 1000) break;
 		}
 		while( x > applet.width - dim.width || x < dim.width
 		       || y < dim.height || y > applet.height - dim.height );
